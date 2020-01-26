@@ -2,19 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('CI') {
             steps {
-                echo 'Building..'
+                echo 'Building artifact and pushing to Nexus..'
             }
         }
-        stage('Test') {
+        stage('CD') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                echo 'Picking Artifact from CI and deploying in Tomcat..'
             }
         }
     }
