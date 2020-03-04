@@ -12,4 +12,6 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'project/target/*.war', fingerprint: true
+        }
+    }
 }
