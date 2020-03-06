@@ -1,25 +1,24 @@
 pipeline {
-    
-def app
 
+    agent any
+    
     stages {
         stage('Build image') {
-        parallel(
+            steps {
 
         app = docker.build("aditya4uhere/tomcat01")
-        
-        )
+            }
     }
 
     stage('Push image') {
 
-        parallel (
+        steps {
 
         docker.withRegistry('https://hub.docker.com', 'docker-hub-credentials') {
             app.push("${env.BUILD_NUMBER}")
             app.push("docker1")
+         }
         }
-      )
     }
  }
 }
