@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
-            steps {
-                echo 'Building .war artifact'
-                sh 'mvn package'
-            }
+        stage('Build image') {
+
+        app = docker.build("aditya4uhere/tomcat01")
+    }
+
+    stage('Push image') {
+        docker.withRegistry('https://hub.docker.com', 'docker-hub-credentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("docker")
         }
     }
-    post {
-        always {
-            archiveArtifacts artifacts: 'project/target/*.war', fingerprint: true
-        }
-    }
+ }
 }
