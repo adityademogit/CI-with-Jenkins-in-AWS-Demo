@@ -2,7 +2,7 @@ pipeline {
 
  agent {
         docker {
-            image 'aditya4uhere/tomcat01:latest'
+            image 'aditya4uhere/devops:1.0.1'
             args '-v $HOME/.m2:/root/.m2'
         }
     }
@@ -16,7 +16,7 @@ pipeline {
          script {
     docker.withRegistry('https://hub.docker.com', 'docker-hub-credentials') {
 
-        def customImage = docker.build("aditya4uhere/tomcat01:latest")
+        def customImage = docker.build("aditya4uhere/devops:1.0.1")
 
         /* Push the container to the custom Registry */
         customImage.push()
