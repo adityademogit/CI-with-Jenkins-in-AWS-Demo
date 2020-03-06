@@ -14,7 +14,7 @@ pipeline {
         steps {
     checkout scm
          script {
-    docker.withRegistry('https://hub.docker.com/repository/docker/aditya4uhere/tomcat01', 'docker-hub-credentials') {
+    docker.withRegistry('https://hub.docker.com', 'docker-hub-credentials') {
 
         def customImage = docker.build("aditya4uhere/tomcat01:latest")
 
