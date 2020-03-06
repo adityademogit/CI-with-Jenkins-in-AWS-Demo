@@ -1,28 +1,32 @@
 pipeline {
+ 
+ environment {
+    registry = "aditya4uhere/devops:1.0.1"
+    registryCredential = 'docker-hub-credentials'
+    dockerImage = ''
+  }
 
- agent {
-        docker {
-            image 'aditya4uhere/devops:1.0.1'
-            args '-v $HOME/.m2:/root/.m2'
-        }
-    }
+ agent any
     
     stages {
         
-    stage('Build and Push image') {
+    stage('Build image') {
 
         steps {
     checkout scm
-         script {
-    docker.withRegistry('https://hub.docker.com', 'docker-hub-credentials') {
-
-        def customImage = docker.build("aditya4uhere/devops:1.0.1")
-
-        /* Push the container to the custom Registry */
-        customImage.push()
-    }
+    script {
+          dockerImage = docker.build registry
+        }
     }
 }
+     stage ('Push Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
     }
  }
 }
