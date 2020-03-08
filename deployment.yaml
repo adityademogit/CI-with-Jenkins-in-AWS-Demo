@@ -15,7 +15,7 @@ spec:
   spec:
    containers:
     - name: myapp
-      image: gcr.io/devops-aditya:tagversion
+      image: gcr.io/devops-aditya/aditya4uhere/devops:tagversion
       ports:
       - containerPort: 8080
 ---
