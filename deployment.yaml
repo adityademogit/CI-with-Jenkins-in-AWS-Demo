@@ -8,28 +8,26 @@ spec:
  selector:
   matchLabels:
    app: myapp
-  template:
-   metadata:
-    labels:
-     app: myapp
-    spec:
-     containers:
-     - name: myapp
-       image: aditya4uhere/devops:tagversion
-       ports:
-       - containerPort: 8080
+ template:
+  metadata:
+   labels:
+    app: myapp
+  spec:
+   containers:
+    - name: myapp
+      image: aditya4uhere/devops:tagversion
+      ports:
+      - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: myapp
-labels:
- app: myapp
- spec:
-  type: LoadBalancer
+spec:
+  type: LoadBalancer 
+  selector:
+   app: myapp
   ports:
-  - protocol: TCP
-  port: 80
-  targetPort: 8080
-selector:
- app: myapp
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
