@@ -1,32 +1,52 @@
 pipeline {
  
- environment {
-    registry = "aditya4uhere/devops:1.0.1"
-    registryCredential = 'docker-hub-credentials'
-    dockerImage = ''
-  }
-
  agent any
-    
+ 
+ environment {
+    PROJECT_ID = "devops-aditya"
+    CLUSTER_NAME = 'k8-demo'
+    LOCATION = 'us-central1-c'
+    CREDENTIALS_ID = 'devops-aditya'
+  }
+   
     stages {
-        
-    stage('Build image') {
+     stage('Checkout SCM') {
+      steps {
+       checkout scm
+      }
+     }
+    stage('Build package') {
 
         steps {
-    checkout scm
-    script {
-          dockerImage = docker.build registry
+        echo "Cleaning and packing.."
+         sh 'mvn clean package'
         }
     }
-}
-     stage ('Push Image') {
+     stage('Test') {
+      steps {
+       echo "Testing.."
+       sh 'mvn test'
+      }
+     }
+     stage('Build and push Docker Image') {
       steps{
         script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
+         appimage = docker.build( "aditya4uhere/devops:${env.BUILD_ID}")
+         docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials') {
+            appimage.push()
           }
         }
       }
     }
- }
+     stage('Deploy to Kubernetes') {
+      steps {
+       echo "Deploying to Kubernetes Cluster.."
+       sh 'ls -ltr'
+       sh 'pwd'
+       sh "sed -i 's/tagversion/${env.BUILD_ID}/g' deployment.yaml"
+       step($class: 'KubernetesEngineBuilder', projectid: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, credentialsid: env.CREDENTIALS_ID, verifyDeployments: true)
+       echo "Deployment to Kubernetes cluster completed.."
+      }
+     }
+    }
 }
