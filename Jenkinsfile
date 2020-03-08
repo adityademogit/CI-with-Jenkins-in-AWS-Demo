@@ -36,7 +36,7 @@ pipeline {
            docker.withRegistry('https://gcr.io','gcr:gcr_creds') {
             appimage.push("${env.BUILD_ID}")
           }
-        }gcr:
+        }
       }
     }
      stage('Deploy to Kubernetes') {
