@@ -33,10 +33,10 @@ pipeline {
         script {
          appimage = docker.build( "gcr.io/aditya4uhere/devops:${env.BUILD_ID}")
          //docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials') {
-           docker.withRegistry('https://gcr.io','gcr_creds') {
-            appimage.push()
+           docker.withRegistry('https://gcr.io','gcr:gcr_creds') {
+            appimage.push("${env.BUILD_ID}")
           }
-        }
+        }gcr:
       }
     }
      stage('Deploy to Kubernetes') {
