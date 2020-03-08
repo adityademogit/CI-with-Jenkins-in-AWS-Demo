@@ -31,7 +31,7 @@ pipeline {
      stage('Build and push Docker Image') {
       steps{
         script {
-         appimage = docker.build( "gcr.io/devops-aditya:${env.BUILD_ID}")
+         appimage = docker.build( "gcr.io/devops-aditya/aditya4uhere/devops:${env.BUILD_ID}")
          //docker.withRegistry('https://registry.hub.docker.com','docker-hub-credentials') {
            docker.withRegistry('https://gcr.io','gcr:gcr_creds') {
             appimage.push("${env.BUILD_ID}")
